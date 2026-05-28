@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エントリーフォーム｜売上アップ道場 by RMC</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1008;
+    --ink-soft: #2d1f0e;
+    --washi: #f5f0e8;
+    --washi-dark: #ede5d5;
+    --crimson: #9b1c1c;
+    --crimson-light: #c0392b;
+    --crimson-pale: #fdf0f0;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --ash: #8a7d6e;
+    --border: #d4c5a9;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--washi);
+    color: var(--ink);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(155,28,28,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(155,28,28,0.03) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+
+  /* ===== HEADER ===== */
+  .site-header {
+    background: var(--ink);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 120%, rgba(155,28,28,0.35) 0%, transparent 65%);
+  }
+  .header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 52px 24px 44px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .header-eyebrow {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    margin-bottom: 18px;
+    display: block;
+  }
+  .header-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(26px, 5vw, 38px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+  .header-title span {
+    color: var(--gold-light);
+  }
+  .header-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.1em;
+    margin-bottom: 28px;
+  }
+  .deadline-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--crimson);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 22px;
+    letter-spacing: 0.08em;
+  }
+  .deadline-badge strong {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  /* brush stroke divider */
+  .brush-divider {
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    margin-top: -1px;
+  }
+  .brush-divider svg { display: block; width: 100%; }
+
+  /* ===== FORM WRAPPER ===== */
+  .form-wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  /* ===== SECTION LABEL ===== */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 44px 0 24px;
+  }
+  .section-label-mark {
+    width: 4px;
+    height: 28px;
+    background: var(--crimson);
+    flex-shrink: 0;
+  }
+  .section-label-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.1em;
+  }
+  .section-label-num {
+    font-size: 11px;
+    color: var(--ash);
+    letter-spacing: 0.12em;
+    margin-left: auto;
+  }
+
+  /* ===== FIELD ===== */
+  .field {
+    margin-bottom: 28px;
+  }
+  .field-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .required {
+    font-size: 10px;
+    background: var(--crimson);
+    color: #fff;
+    padding: 2px 7px;
+    letter-spacing: 0.06em;
+  }
+  .field-hint {
+    font-size: 12px;
+    color: var(--ash);
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea,
+  select {
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 0;
+    padding: 12px 16px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--crimson);
+    box-shadow: 0 0 0 3px rgba(155,28,28,0.08);
+  }
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.7;
+  }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%238a7d6e' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  /* ===== RADIO / CHECKBOX ===== */
+  .radio-group,
+  .check-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .radio-item,
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 14px;
+    color: var(--ink);
+    letter-spacing: 0.03em;
+    user-select: none;
+  }
+  .radio-item:hover,
+  .check-item:hover {
+    border-color: var(--crimson);
+    background: var(--crimson-pale);
+  }
+  .radio-item input,
+  .check-item input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--crimson);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .radio-item.selected,
+  .check-item.selected {
+    border-color: var(--crimson);
+    background: var(--crimson-pale);
+  }
+
+  /* ===== PLATFORM GRID ===== */
+  .platform-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px;
+  }
+  .platform-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 14px;
+    background: #fff;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--ink);
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .platform-item:hover { border-color: var(--crimson); background: var(--crimson-pale); }
+  .platform-item.selected { border-color: var(--crimson); background: var(--crimson-pale); }
+  .platform-item input { accent-color: var(--crimson); }
+
+  /* ===== SALES RANGE ===== */
+  .sales-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  @media (max-width: 480px) { .sales-grid { grid-template-columns: 1fr; } }
+  .sales-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--ink);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .sales-item:hover { border-color: var(--crimson); background: var(--crimson-pale); }
+  .sales-item.selected {
+    border-color: var(--crimson);
+    background: var(--crimson-pale);
+    font-weight: 500;
+  }
+  .sales-item input { accent-color: var(--crimson); flex-shrink: 0; }
+
+  /* ===== DIVIDER ===== */
+  .form-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0;
+  }
+
+  /* ===== COMMIT BOX ===== */
+  .commit-box {
+    background: var(--ink);
+    padding: 24px 28px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .commit-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 100% 100%, rgba(155,28,28,0.3) 0%, transparent 60%);
+  }
+  .commit-box-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+  }
+  .commit-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .commit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    cursor: pointer;
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .commit-item:hover { background: rgba(155,28,28,0.25); border-color: rgba(155,28,28,0.5); }
+  .commit-item.selected { background: rgba(155,28,28,0.3); border-color: var(--crimson-light); color: #fff; }
+  .commit-item input { accent-color: var(--crimson-light); flex-shrink: 0; }
+
+  /* ===== SUBMIT ===== */
+  .submit-area {
+    text-align: center;
+    padding: 40px 0 20px;
+  }
+  .submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--crimson);
+    color: #fff;
+    border: none;
+    padding: 18px 52px;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .submit-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    transition: background 0.2s;
+  }
+  .submit-btn:hover { background: #7f1616; transform: translateY(-1px); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-note {
+    font-size: 12px;
+    color: var(--ash);
+    margin-top: 14px;
+    line-height: 1.7;
+  }
+
+  /* ===== COMPLETE ===== */
+  .complete-screen {
+    display: none;
+    text-align: center;
+    padding: 80px 24px;
+  }
+  .complete-icon {
+    font-size: 52px;
+    margin-bottom: 20px;
+  }
+  .complete-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--crimson);
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+  .complete-text {
+    font-size: 14px;
+    color: var(--ash);
+    line-height: 1.9;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  /* ===== ANIMATION ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .field, .section-label, .commit-box {
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @media (max-width: 600px) {
+    .header-inner { padding: 40px 20px 36px; }
+    .form-wrapper { padding: 0 16px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <span class="header-eyebrow">Rebel Muses Craft — 参加者エントリーフォーム</span>
+    <h1 class="header-title">売上アップ道場 <span>by RMC</span></h1>
+    <p class="header-sub">3ヶ月集中プログラム</p>
+    <div class="deadline-badge">エントリー締切&nbsp;<strong>2026年6月15日（日）</strong></div>
+  </div>
+</header>
+
+<div class="brush-divider">
+  <svg viewBox="0 0 1440 28" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,0 L1440,0 L1440,14 Q1200,28 960,20 Q720,12 480,22 Q240,30 0,16 Z" fill="#1a1008"/>
+  </svg>
+</div>
+
+<!-- FORM -->
+<main class="form-wrapper">
+  <form id="entryForm" onsubmit="handleSubmit(event)">
+
+    <!-- SECTION 1 -->
+    <div class="section-label">
+      <div class="section-label-mark"></div>
+      <span class="section-label-text">基本情報</span>
+      <span class="section-label-num">01 / 04</span>
+    </div>
+    <hr class="form-divider">
+
+    <div class="field" style="animation-delay:0.05s">
+      <label class="field-label">お名前（ニックネームでOK）<span class="required">必須</span></label>
+      <input type="text" name="name" placeholder="例：さくら / handmade_sakura" required>
+    </div>
+
+    <div class="field" style="animation-delay:0.1s">
+      <label class="field-label">Discord のアカウント名<span class="required">必須</span></label>
+      <p class="field-hint">専用部屋への招待に使用します。正確なユーザー名を入力してください。</p>
+      <input type="text" name="discord" placeholder="例：sakura#1234" required>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section-label" style="animation-delay:0.12s">
+      <div class="section-label-mark"></div>
+      <span class="section-label-text">活動状況</span>
+      <span class="section-label-num">02 / 04</span>
+    </div>
+    <hr class="form-divider">
+
+    <div class="field" style="animation-delay:0.15s">
+      <label class="field-label">販売しているジャンル・商品<span class="required">必須</span></label>
+      <input type="text" name="genre" placeholder="例：レジンアクセサリー、刺繍雑貨、布小物など" required>
+    </div>
+
+    <div class="field" style="animation-delay:0.18s">
+      <label class="field-label">メインの販売プラットフォーム（複数選択可）<span class="required">必須</span></label>
+      <div class="platform-grid" id="platforms">
+        <label class="platform-item"><input type="checkbox" name="platform" value="ミンネ"> ミンネ</label>
+        <label class="platform-item"><input type="checkbox" name="platform" value="クリーマ"> クリーマ</label>
+        <label class="platform-item"><input type="checkbox" name="platform" value="BASE"> BASE</label>
+        <label class="platform-item"><input type="checkbox" name="platform" value="メルカリ"> メルカリ</label>
+        <label class="platform-item"><input type="checkbox" name="platform" value="Shopify"> Shopify</label>
+        <label class="platform-item"><input type="checkbox" name="platform" value="その他"> その他</label>
+      </div>
+    </div>
+
+    <div class="field" style="animation-delay:0.2s">
+      <label class="field-label">Instagram は運用していますか？<span class="required">必須</span></label>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="instagram" value="はい・定期的に投稿している" required> はい・定期的に投稿している</label>
+        <label class="radio-item"><input type="radio" name="instagram" value="はい・ただし更新が止まっている"> はい・ただし更新が止まっている</label>
+        <label class="radio-item"><input type="radio" name="instagram" value="アカウントはあるがほぼ使っていない"> アカウントはあるがほぼ使っていない</label>
+        <label class="radio-item"><input type="radio" name="instagram" value="いいえ・アカウントなし"> いいえ・アカウントなし</label>
+      </div>
+    </div>
+
+    <div class="field" style="animation-delay:0.22s">
+      <label class="field-label">月の平均売上はどのくらいですか？<span class="required">必須</span></label>
+      <div class="sales-grid" id="salesGrid">
+        <label class="sales-item"><input type="radio" name="sales" value="0-5万円" required> 0〜5万円</label>
+        <label class="sales-item"><input type="radio" name="sales" value="5-10万円"> 5〜10万円</label>
+        <label class="sales-item"><input type="radio" name="sales" value="10-20万円"> 10〜20万円</label>
+        <label class="sales-item"><input type="radio" name="sales" value="20-30万円"> 20〜30万円</label>
+        <label class="sales-item"><input type="radio" name="sales" value="30-50万円"> 30〜50万円</label>
+        <label class="sales-item"><input type="radio" name="sales" value="50万円以上"> 50万円以上</label>
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section-label" style="animation-delay:0.24s">
+      <div class="section-label-mark"></div>
+      <span class="section-label-text">参加の動機</span>
+      <span class="section-label-num">03 / 04</span>
+    </div>
+    <hr class="form-divider">
+
+    <div class="field" style="animation-delay:0.26s">
+      <label class="field-label">今一番の悩みや課題を教えてください<span class="required">必須</span></label>
+      <textarea name="problem" placeholder="例：投稿が続かない、何を発信すればいいか分からない、売上が伸び悩んでいる…など" required></textarea>
+    </div>
+
+    <div class="field" style="animation-delay:0.28s">
+      <label class="field-label">3ヶ月で達成したい目標を具体的に教えてください<span class="required">必須</span></label>
+      <textarea name="goal" placeholder="例：月売上5万円を達成したい、毎日投稿を続けられるようになりたい、販売会を1回開催したい…など" required></textarea>
+    </div>
+
+    <div class="field" style="animation-delay:0.3s">
+      <label class="field-label">このプログラムに参加しようと思った理由</label>
+      <textarea name="reason" placeholder="自由にお書きください" style="min-height:80px"></textarea>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section-label" style="animation-delay:0.32s">
+      <div class="section-label-mark"></div>
+      <span class="section-label-text">コミットメント確認</span>
+      <span class="section-label-num">04 / 04</span>
+    </div>
+    <hr class="form-divider">
+
+    <div class="commit-box" style="animation-delay:0.34s">
+      <p class="commit-box-title">― 毎日の行動報告について ―</p>
+      <p style="font-size:13px; color:rgba(255,255,255,0.65); margin-bottom:14px; position:relative; z-index:1; line-height:1.7;">Discord または LINE オープンチャットへの毎日投稿にコミットできますか？</p>
+      <div class="commit-radio-group" id="commitDaily">
+        <label class="commit-item"><input type="radio" name="commit_daily" value="はい、毎日コミットします" required> はい、毎日コミットします</label>
+        <label class="commit-item"><input type="radio" name="commit_daily" value="できる限り頑張ります"> できる限り頑張ります</label>
+      </div>
+    </div>
+
+    <div class="commit-box" style="animation-delay:0.36s">
+      <p class="commit-box-title">― 月1回の Zoom 会について ―</p>
+      <p style="font-size:13px; color:rgba(255,255,255,0.65); margin-bottom:14px; position:relative; z-index:1; line-height:1.7;">月1回の Zoom 会に参加できますか？（日程は後日調整します）</p>
+      <div class="commit-radio-group" id="commitZoom">
+        <label class="commit-item"><input type="radio" name="commit_zoom" value="はい、参加します" required> はい、参加します</label>
+        <label class="commit-item"><input type="radio" name="commit_zoom" value="難しい場合もあるが参加予定"> 難しい場合もあるが参加予定</label>
+      </div>
+    </div>
+
+    <div class="field" style="animation-delay:0.38s">
+      <label class="field-label">道場への意気込みを一言！<span class="required">必須</span></label>
+      <textarea name="motivation" placeholder="あなたの熱い気持ちを聞かせてください！" style="min-height:80px" required></textarea>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <button type="submit" class="submit-btn">
+        🥋&nbsp;&nbsp;道場にエントリーする
+      </button>
+      <p class="submit-note">
+        締め切り：2026年6月15日（日）<br>
+        RMC生限定・無料プログラムです
+      </p>
+    </div>
+
+  </form>
+
+  <!-- COMPLETE -->
+  <div class="complete-screen" id="completeScreen">
+    <div class="complete-icon">🥋</div>
+    <h2 class="complete-title">エントリー完了！</h2>
+    <p class="complete-text">
+      道場への参加申し込みを受け付けました。<br>
+      6月16日以降に Discord の専用部屋への招待をお送りします。<br>
+      一緒に売上を作りましょう！
+    </p>
+  </div>
+</main>
+
+<script>
+async function handleSubmit(e) {
+  e.preventDefault();
+
+  const form = document.getElementById('entryForm');
+  const btn = form.querySelector('.submit-btn');
+
+  // ★ここにSTEP3でコピーしたGASのURLを貼り付ける★
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbwVAp6nAvadAInJwhfOjLHE0YWPTZZzaKq_aoMEBXoUWGoakz8NbDHRry74wyql4CD0rw/exec';
+
+  // ボタンを送信中に変える
+  btn.textContent = '送信中...';
+  btn.disabled = true;
+
+  // フォームの回答を集める
+  const data = {
+    name:         form.querySelector('[name="name"]').value,
+    discord:      form.querySelector('[name="discord"]').value,
+    genre:        form.querySelector('[name="genre"]').value,
+    platform:     [...form.querySelectorAll('input[name="platform"]:checked')]
+                    .map(el => el.value).join('、'),
+    instagram:    form.querySelector('input[name="instagram"]:checked')?.value || '未回答',
+    sales:        form.querySelector('input[name="sales"]:checked')?.value || '未回答',
+    problem:      form.querySelector('[name="problem"]').value,
+    goal:         form.querySelector('[name="goal"]').value,
+    reason:       form.querySelector('[name="reason"]').value,
+    commit_daily: form.querySelector('input[name="commit_daily"]:checked')?.value || '未回答',
+    commit_zoom:  form.querySelector('input[name="commit_zoom"]:checked')?.value || '未回答',
+    motivation:   form.querySelector('[name="motivation"]').value
+  };
+
+  try {
+    await fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    // 完了画面を表示
+    form.style.display = 'none';
+    const c = document.getElementById('completeScreen');
+    c.style.display = 'block';
+    c.style.animation = 'fadeUp 0.6s ease both';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch (err) {
+    btn.textContent = '🥋 道場にエントリーする';
+    btn.disabled = false;
+    alert('送信中にエラーが発生しました。もう一度お試しください。');
+  }
+}
+
+// highlight selected radio/checkbox
+document.querySelectorAll('.radio-item, .sales-item').forEach(label => {
+  label.addEventListener('change', () => {
+    const name = label.querySelector('input').name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(inp => {
+      inp.closest('label').classList.toggle('selected', inp.checked);
+    });
+  });
+});
+document.querySelectorAll('.platform-item').forEach(label => {
+  label.addEventListener('change', () => {
+    label.classList.toggle('selected', label.querySelector('input').checked);
+  });
+});
+document.querySelectorAll('.commit-item').forEach(label => {
+  label.addEventListener('change', () => {
+    const name = label.querySelector('input').name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(inp => {
+      inp.closest('label').classList.toggle('selected', inp.checked);
+    });
+  });
+});
+</script>
+</body>
+</html>
